@@ -1,0 +1,34 @@
+---
+
+- hosts: '{{target}}'
+  become: false
+
+  tasks:
+    - name: Creates Jenkins volume
+      file:
+        path: /home/{{user}}/jenkins_home
+        state: directory
+        owner: '{{user}}'
+        group: '{{user}}'
+        mode: 0760
+        recurse: yes
+      
+    - name: application container
+      docker_container:
+        name: Jenkins
+        image: jenkins/jenkins
+        state: started
+        pull: yes
+        restart_policy: unless-stopped
+        container_default_behavior: no_defaults
+        network_mode: bridge
+        networks:
+          - name: "macvlan24"
+            ipv4_address: "192.168.50.10"
+
+        ports:
+          - "8080:8080"
+          - "50000:50000"
+        volumes:
+          - /home/{{user}}/jenkins_home:/var/jenkins_home
+        

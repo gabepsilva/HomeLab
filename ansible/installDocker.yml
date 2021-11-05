@@ -1,0 +1,60 @@
+---
+- hosts: '{{target}}'
+  remote_user: '{{user}}'
+  become: true
+  
+  tasks:
+    - name: Install aptitude using apt
+      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+
+    - name: Install required system packages
+      apt: name={{ item }} state=latest update_cache=yes 
+      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt: update_cache=yes name=docker-ce state=latest
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Clean apt cache
+      command:
+        cmd: apt-get clean
+
+    - name: Ensure group "docker" 
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: adding existing user '{{ user }}' to group docker
+      user:
+        name: '{{ user }}'
+        groups: docker
+        append: yes
+
+    # Connects docker to the host network (set the below to your network settings)
+    - name: Create a network with options
+      docker_network:
+        name: macvlan24
+        driver: macvlan
+        internal: false
+        driver_options:
+          parent: "{{ ansible_default_ipv4.alias }}"  # enp2s0 or br0
+        ipam_driver_options: {}
+        ipam_config: 
+          - subnet: '192.168.50.0/24'
+            gateway: 192.168.50.1
+            #iprange: '192.168.50.255/24'
+            aux_addresses:
+              server: 192.168.50.172

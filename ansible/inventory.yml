@@ -1,0 +1,8 @@
+---
+
+homelab:
+  hosts:
+    bob:
+      ansible_host: bob.psilva.org
+    jenkins_node1:
+      ansible_host: jenkins-node1.psilva.org
