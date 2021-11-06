@@ -2,26 +2,19 @@ pipeline {
     agent any
 
     stages{
-        stage("test-1"){
 
-            steps{
-                echo "Jenkins working!!"
-                sh 'env|sort'
-            }
-        }
-
-
-        stage('Test a gradle image') {
+        stage('Build Docs') {
             agent {
                 docker {
-                    image 'gradle:6.7-jdk11'
+                    image 'squidfunk/mkdocs-material'
                     // Run the container on the node specified at the top-level of the Pipeline, in the same workspace, rather than on a new node entirely:
-                    reuseNode true
+                    //reuseNode true
                 }
-            }
-            steps {
-                sh 'gradle --version'
-                sh 'env|sort'
+
+            steps 
+                sh 'cd docs'
+                sh 'pwd; ls -lhrta'
+                sh 'mkdocs build'
             }
         }
 
