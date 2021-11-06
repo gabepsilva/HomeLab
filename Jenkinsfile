@@ -13,6 +13,7 @@ pipeline {
             }
 
             steps {
+                sh 'pwd; ls -lhrta'
                 sh 'cd docs'
                 sh 'pwd; ls -lhrta'
                 sh 'mkdocs build'
