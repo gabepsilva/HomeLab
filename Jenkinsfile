@@ -6,6 +6,7 @@ pipeline {
 
             steps{
                 echo "Jenkins working!!"
+                sh 'env|sort'
             }
         }
 
@@ -20,6 +21,7 @@ pipeline {
             }
             steps {
                 sh 'gradle --version'
+                sh 'env|sort'
             }
         }
 
