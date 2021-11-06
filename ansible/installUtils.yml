@@ -1,5 +1,6 @@
 ---
 - hosts: '{{target}}'
+  remote_user: '{{user}}'
   become: true
 
 
@@ -14,9 +15,16 @@
 
     - name: Install Utils
       apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois']
+      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois', 'cron']
 
     - name: Clean apt cache
       command:
         cmd: apt-get clean
 
+
+
+
+@reboot java -jar agent.jar -jnlpUrl 'http://192.168.50.10:8080/computer/node1/jenkins-agent.jnlp' -secret @/home/jenkins/jk-secret-file -workDir /home/jenkins/jenkins-workspaces
+
+~                                                                                                                                                                                                                                                                           
+~ 
