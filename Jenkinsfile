@@ -1,23 +1,8 @@
-pipeline {
-    agent none
+/*
+ * This file is just a place order since Jenkins requires it.
+ * There are a few systems under the HomeLab repo and they all have their on Jenkinsfile. 
+ *
+*/
+ 
 
-    stages{
 
-        stage('Build Docs') {
-            agent {
-                docker {
-                    image 'squidfunk/mkdocs-material'
-                    // Run the container on the node specified at the top-level of the Pipeline, in the same workspace, rather than on a new node entirely:
-                    //reuseNode true
-                }
-            }
-
-            steps {
-                sh 'pwd; ls -lhrta'
-                sh 'cd docs'
-                sh 'pwd; ls -lhrta'
-                sh 'mkdocs build'
-            }
-        }
-    }
-}

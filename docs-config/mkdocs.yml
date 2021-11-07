@@ -1,0 +1,5 @@
+
+site_name: !ENV [SITE_NAME, 'Gabriels homelab docs']
+
+theme:
+  name: 'material'

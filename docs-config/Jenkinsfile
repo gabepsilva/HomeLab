@@ -1,0 +1,32 @@
+pipeline {
+    agent 'node1'
+
+    stages{
+        def app     
+        stage('Build Docs') {
+            //agent {
+            //    docker {
+            //        image 'squidfunk/mkdocs-material'
+                    // Run the container on the node specified at the top-level of the Pipeline, in the same workspace, rather than on a new node entirely:
+                    //reuseNode true
+            //    }
+            //}
+
+            steps {
+                app = docker.build("ghcr.io/gabrielpsilva/homelab-docs") 
+                //sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
+
+                //sh 'docker run --rm -it -v ${PWD}/docs:/docs squidfunk/mkdocs-material build'
+                //sh 'pwd; ls -lhrta'
+                //sh 'ls -lhrta ./docs'
+            }
+        }
+
+        stage('Push image') {
+            docker.withRegistry('https://registry.hub.docker.com', 'git') {                   
+                app.push("${env.BUILD_NUMBER}")            
+                app.push("latest")        
+            }    
+        }   
+    }
+}
