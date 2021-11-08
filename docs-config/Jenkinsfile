@@ -18,8 +18,8 @@ pipeline {
             steps{
 
                 withCredentials([usernamePassword(credentialsId: 'gab-90d', passwordVariable: 'ghuserpass', usernameVariable: 'ghuser')]) {
-                    sh "docker login -u ghuser -p ghuserpass 'https://${registry}'"
-                    sh "docker push ghcr.io/gabrielpsilva/homelab"
+                    sh "docker login -u ${ghuser} -p ${ghuserpass} 'https://${registry}'"
+                    sh "docker push ${registry}"
                 }
             }
         }
