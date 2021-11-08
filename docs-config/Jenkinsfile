@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registry = 'ghcr.io/gabrielpsilva/homelab-docs'
+        registry = 'ghcr.io/gabrielpsilva/homelab-docs:${env.BUILD_NUMBER}'
         registryCredential = 'gab-90d'
         dockerImage = ''
     }
@@ -14,7 +14,7 @@ pipeline {
 
             steps {
                 script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                    dockerImage = docker.build(registry, "-f docker/db/Dockerfile .")
                 }
                 //sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
             }
