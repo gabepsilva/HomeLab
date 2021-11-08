@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registry = "ghcr.io/gabrielpsilva/homelab-docs"
+        registry = "ghcr.io/gabrielpsilva/homelab"
         registryCredential = 'gab-90d'
         dockerImage = ''
     }
