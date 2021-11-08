@@ -14,7 +14,7 @@ pipeline {
 
             steps {
                 script {
-                    dockerImage = docker.build(registry, "-f docker/db/Dockerfile .")
+                    dockerImage = docker.build(registry, "-f docs-config/Dockerfile .")
                 }
                 //sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
             }
