@@ -3,32 +3,25 @@ pipeline {
 
     environment {
         registry = "ghcr.io/gabrielpsilva/homelab"
-        registryCredential = 'gab-90d'
-        dockerImage = ''
     }
     
-
     stages{
 
         stage('Build Docs') {
 
             steps {
-                script {
-                    dockerImage = docker.build("${registry}:${env.BUILD_NUMBER}", "-f docs-config/Dockerfile .")
-                }
-                //sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
+                sh 'docker build -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
             }
         }
 
         stage('Push image') {
             steps{
-                script{
-                    docker.withRegistry("https://${registry}", registryCredential) {
-                        dockerImage.push()
-                    }
+
+                withCredentials([usernamePassword(credentialsId: 'gab-90d', passwordVariable: 'ghuserpass', usernameVariable: 'ghuser')]) {
+                    sh "docker login -u ghuser -p ghuserpass 'https://${registry}'"
+                    sh "docker push ghcr.io/gabrielpsilva/homelab"
                 }
             }
         }
-
     }
 }
