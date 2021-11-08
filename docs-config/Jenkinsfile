@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registry = "ghcr.io/gabrielpsilva/homelab"
+        registry = "ghcr.io/gabrielpsilva/homelab-docs"
     }
     
     stages{
@@ -10,7 +10,7 @@ pipeline {
         stage('Build Docs') {
 
             steps {
-                sh 'docker build -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
+                sh "docker build -f docs-config/Dockerfile -t ${registry} ."
             }
         }
 
