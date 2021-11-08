@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages{
-        def app     
+        //def app     
         stage('Build Docs') {
             //agent {
             //    docker {
