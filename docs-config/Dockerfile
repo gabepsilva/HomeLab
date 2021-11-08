@@ -9,7 +9,7 @@ ADD docs ./docs
 RUN mkdocs build
 
 
-FROM nginx
+FROM nginx:alpine
 
 WORKDIR /opt
 
