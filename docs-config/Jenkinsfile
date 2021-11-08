@@ -13,8 +13,8 @@ pipeline {
             //}
 
             steps {
-                //app = docker.build("ghcr.io/gabrielpsilva/homelab-docs") 
-                sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
+                app = docker.build("ghcr.io/gabrielpsilva/homelab-docs") 
+                //sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
 
                 //sh 'docker run --rm -it -v ${PWD}/docs:/docs squidfunk/mkdocs-material build'
                 //sh 'pwd; ls -lhrta'
