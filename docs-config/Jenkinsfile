@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registry = "ghcr.io/gabrielpsilva/homelab-docs:${env.BUILD_NUMBER}"
+        registry = "ghcr.io/gabrielpsilva/homelab-docs"
         registryCredential = 'gab-90d'
         dockerImage = ''
     }
@@ -14,7 +14,7 @@ pipeline {
 
             steps {
                 script {
-                    dockerImage = docker.build(registry, "-f docs-config/Dockerfile .")
+                    dockerImage = docker.build("${registry}:${env.BUILD_NUMBER}", "-f docs-config/Dockerfile .")
                 }
                 //sh 'docker build  -f docs-config/Dockerfile -t ghcr.io/gabrielpsilva/homelab-docs .'
             }
@@ -23,7 +23,7 @@ pipeline {
         stage('Push image') {
             steps{
                 script{
-                    docker.withRegistry(registry, registryCredential) {
+                    docker.withRegistry("https://${registry}", registryCredential) {
                         dockerImage.push()
                     }
                 }
