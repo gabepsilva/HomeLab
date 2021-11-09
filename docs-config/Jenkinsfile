@@ -24,5 +24,19 @@ pipeline {
                 sh "docker push ${registry}"
             }
         }
+
+        stage('Deploy') {
+            steps{
+
+                /*
+                    enable this after vault installation and creation of a service account with credentials saved in vault
+
+                    
+                sh "sshpass -p PASS \
+                    ssh user_name@hostmachine 'docker run --rm -d --name HomeLabDocs -p 8081:80 ghcr.io/gabrielpsilva/homelab-docs'"
+
+                */
+            }
+        }
     }
 }

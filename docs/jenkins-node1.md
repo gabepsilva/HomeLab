@@ -39,7 +39,7 @@ set node server to auto start agent server (agent server has a secret given on a
 @reboot java -jar agent.jar -jnlpUrl 'http://192.168.50.10:8080/computer/node1/jenkins-agent.jnlp' -secret @/home/jenkins/jk-secret-file -workDir /home/jenkins/jenkins-workspaces
 ```
 
-* copy github ssh key from vault to jenkins-node under jenkins user
+* no need to  -- copy github ssh key from vault to jenkins-node under jenkins user: just add token as user and password
 * 0 buiilds on master
 
 * creage gh token and add to to jenkins as user pass
