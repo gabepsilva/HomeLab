@@ -1,0 +1,40 @@
+---
+
+- hosts: '{{target}}'
+  remote_user: '{{user}}'
+  become: yes
+
+  tasks:
+    - name: Creates Vault volume
+      file:
+        path: /home/{{user}}/vault/config
+        state: directory
+        owner: '{{user}}'
+        group: '{{user}}'
+        mode: 0770
+        recurse: yes
+      
+    - name: application container
+      docker_container:
+        name: vault
+        image: vault
+        state: started
+        pull: yes
+        privileged: yes
+        capabilities: [IPC_LOCK]
+        restart_policy: unless-stopped
+        container_default_behavior: no_defaults
+        network_mode: bridge
+        networks:
+          - name: "macvlan24"
+            ipv4_address: "192.168.50.11"
+        ports:
+          - "8200:8200"
+        volumes:
+          - /home/{{user}}/vault:/vault
+        env:
+          VAULT_LOCAL_CONFIG: '{"backend": {"file": {"path": "/vault/file"}}, "default_lease_ttl": "168h", "max_lease_ttl": "720h"}'
+          SKIP_CHOWN: 'true'
+          SKIP_SETCAP: 'true'
+        command: ["server", "-config=/vault/config/local.json"]
+        

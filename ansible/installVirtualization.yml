@@ -1,3 +1,5 @@
+# configure network,
+# install and configure qemu-kvm and lxd
 ---
 - hosts: '{{target}}'
   remote_user: '{{user}}'
@@ -38,24 +40,24 @@
 
     - name: Install Virt packages
       apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'qemu-kvm', 'libvirt-daemon-system', 'libvirt-clients', 'bridge-utils', 'virtinst', 'cloud-init', 'cloud-image-utils']
+      loop: [ 'qemu-kvm', 'libvirt-daemon-system', 'libvirt-clients', 'bridge-utils', 'virtinst', 'cloud-init', 'cloud-image-utils', 'lxc', 'lxd', 'zfsutils-linux']
 
     - name: Clean apt cache
       command:
         cmd: apt-get clean
 
-    - name: Ensure group "libvirt" and "kvm"
+    - name: Ensure group "libvirt", "lxd" and "kvm"
       ansible.builtin.group:
         name:  '{{ item }}'
         state: present
-      loop: ['libvirt', 'kvm']
+      loop: ['libvirt', 'kvm', 'lxd']
 
     - name: adding existing user '{{ user }}' to group libvirt and kvm
       user:
         name: '{{ user }}'
         groups: '{{ item }}'
         append: yes
-      loop: ['libvirt', 'kvm']
+      loop: ['libvirt', 'kvm', 'lxd']
 
     - name: Start and enable virtuallization services
       ansible.builtin.service:
