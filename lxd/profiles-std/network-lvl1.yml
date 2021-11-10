@@ -1,0 +1,10 @@
+config: {
+}
+description: "bridge to network"
+devices:
+  eth0:
+    name: eth0
+    nictype: bridged
+    parent: br0
+    type: nic
+name: network-lvl1.yml

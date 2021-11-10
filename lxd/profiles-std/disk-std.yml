@@ -1,0 +1,8 @@
+config: {}
+description: "disk space from default pool"
+devices:
+  root:
+    path: /
+    pool: default
+    type: disk
+name: disk-std.yml
