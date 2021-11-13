@@ -1,0 +1,5 @@
+config: {
+  boot.autostart: "true"
+}
+description: "Set auto start on"
+name: conf-autostart-on.yml

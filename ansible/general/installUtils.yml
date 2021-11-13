@@ -1,0 +1,20 @@
+---
+- hosts: '{{target}}'
+  become: true
+  gather_facts: no
+
+  tasks:
+  
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install Utils
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois', 'cron', 'jq', 'net-tools']
+
+    - name: Clean apt cache
+      command:
+        cmd: apt-get clean

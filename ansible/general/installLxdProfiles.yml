@@ -1,0 +1,27 @@
+---
+- hosts: '{{target}}'
+  gather_facts: no
+
+  tasks:
+    - name: Copy profile yamls to server
+      ansible.builtin.copy:
+        src: "{{root_folder}}/lxd/profiles-std"
+        dest: /tmp/
+
+    - name: Copy script for profile creation
+      ansible.builtin.copy:
+        src: "{{root_folder}}/lxd/create-profiles.sh"
+        dest: /tmp/create-profiles.sh
+
+    - name: Execute script for profile creation
+      ansible.builtin.command: bash /tmp/create-profiles.sh
+
+    - name: Delete profiles files
+      file:
+        state: absent
+        path: "/tmp/profiles-std"
+
+    - name: Delete script 
+      file:
+        state: absent
+        path: "/tmp/create-profiles.sh"

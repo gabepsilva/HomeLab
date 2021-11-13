@@ -1,0 +1,39 @@
+config:
+  user.user-data: |
+    #cloud-config
+    timezone: America/Toronto
+    hostname: vault-server1
+    fqdn: vault-server1.psilva.org
+    manage_etc_hosts: true
+    package_upgrade: true
+    users:
+      - name: vault
+        home: /vault
+        shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        lock_passwd: false
+        passwd: $6$yvrRMOdDF6$rULJLb/pJ5JKmxWHqFyuFfS08T0T0htYGkQ02U2VPAU.ZaeY1X1zPLVdJQzNxjWTeO74weyHqYNM8BIJq7JQJ/
+        ssh-authorized-keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICST/387GTgu9qAPn92kzTsEyaXu6fdPryg4z+1azovj gabriel@marim
+    ssh_pwauth: true
+    disable_root: true
+
+    packages:
+      - openssh-server
+
+    bootcmd:
+      - date > /etc/server_release
+      
+    write_files:
+      - content: |
+          network:
+            version: 2
+            ethernets:
+              eth0:
+                dhcp4: no
+                addresses: [192.168.50.11/24]
+                gateway4: 192.168.50.1
+                nameservers:
+                  addresses: [192.168.50.4, 192.168.50.1]
+
+        path: /etc/netplan/50-cloud-init.yaml
