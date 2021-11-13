@@ -1,0 +1,90 @@
+- hosts: '{{target}}'
+  remote_user: '{{user}}'
+  become: true
+  gather_facts: no
+  
+  tasks:
+    - name: Add Vault GPG apt Key
+      apt_key:
+        url: https://apt.releases.hashicorp.com/gpg 
+        state: present
+
+    - name: Add Vault Repository
+      apt_repository:
+        repo: deb https://apt.releases.hashicorp.com focal main
+        state: present
+
+    - name: Update apt and install Vault
+      apt: update_cache=yes name=vault state=latest
+
+    - name: create data folder
+      file:
+        path: /vault-data
+        state: directory
+
+    - name: create bin folder
+      file:
+        path: /etc/vault
+        state: directory
+
+    - name: create logs folder
+      file:
+        path: /logs/vault/
+        state: directory
+
+
+    - name: Creating vault config file
+      copy:
+        dest: "/etc/vault/config.json"
+        content: |
+          {
+            "listener": [{
+              "tcp": {
+                "address" : "0.0.0.0:8200",
+                "tls_disable" : 1
+              }
+            }],
+            "api_addr": "http://10.128.0.2:8200",
+            "storage": {
+                "file": {
+                "path" : "/vault-data"
+                }
+            },
+            "max_lease_ttl": "10h",
+            "default_lease_ttl": "10h",
+            "ui":true,
+            "disable_mlock":true
+          }
+
+    - name: Creating service file
+      copy:
+        dest: "/etc/systemd/system/vault.service"
+        owner: 'root'
+        group: 'root'
+        content: |
+          [Unit]
+          Description=vault service
+          Requires=network-online.target
+          After=network-online.target
+          ConditionFileNotEmpty=/etc/vault/config.json
+
+          [Service]
+          EnvironmentFile=-/etc/sysconfig/vault
+          Environment=GOMAXPROCS=2
+          Restart=on-failure
+          ExecStart=/usr/bin/vault server -config=/etc/vault/config.json
+          StandardOutput=/logs/vault/output.log
+          StandardError=/logs/vault/error.log
+          LimitMEMLOCK=infinity
+          ExecReload=/bin/kill -HUP $MAINPID
+          KillSignal=SIGTERM
+
+          [Install]
+          WantedBy=multi-user.target
+
+
+    - name: vault service
+      service:
+        name: vault
+        state: started
+        enabled: yes

@@ -7,15 +7,16 @@ config:
     manage_etc_hosts: true
     package_upgrade: true
     users:
-      - name: root
-        home: /root
+      - name: vault
+        home: /vault
         shell: /bin/bash
+        sudo: ALL=(ALL) NOPASSWD:ALL
         lock_passwd: false
         passwd: $6$yvrRMOdDF6$rULJLb/pJ5JKmxWHqFyuFfS08T0T0htYGkQ02U2VPAU.ZaeY1X1zPLVdJQzNxjWTeO74weyHqYNM8BIJq7JQJ/
         ssh-authorized-keys:
           - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICST/387GTgu9qAPn92kzTsEyaXu6fdPryg4z+1azovj gabriel@marim
     ssh_pwauth: true
-    disable_root: false
+    disable_root: true
 
     packages:
       - openssh-server
@@ -26,23 +27,13 @@ config:
     write_files:
       - content: |
           network:
-            renderer: networkd
+            version: 2
             ethernets:
               eth0:
                 dhcp4: no
-                dhcp6: no
-            version: 2
-
-            bridges:
-              br0:
-                interfaces: [eth0]
                 addresses: [192.168.50.11/24]
                 gateway4: 192.168.50.1
-                mtu: 1500
                 nameservers:
                   addresses: [192.168.50.4, 192.168.50.1]
-                parameters:
-                  stp: true
-                  forward-delay: 4
 
         path: /etc/netplan/50-cloud-init.yaml

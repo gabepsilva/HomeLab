@@ -1,38 +1,10 @@
-# configure network,
-# install and configure qemu-kvm and lxd
 ---
 - hosts: '{{target}}'
   remote_user: '{{user}}'
   become: true
-
-
+  gather_facts: no
 
   tasks:
-    - name: backup /etc/netplan/00-installer-config.yaml
-      ansible.builtin.copy:
-        src: /etc/netplan/00-installer-config.yaml
-        dest: /etc/netplan/00-installer-config.yaml.bkp
-        remote_src: yes
-        backup: yes
-
-
-    - name: Create br0 bridge interface
-      copy:
-        dest: "/etc/netplan/00-installer-config.yaml"
-        content: |
-          network:
-            renderer: networkd
-            ethernets:
-              enp2s0:
-                dhcp4: true
-                optional: true
-            version: 2
-
-            bridges:
-              br0:
-                interfaces: [enp2s0]
-                optional: true
-                dhcp4: yes
 
     - name: Apply new network configs
       ansible.builtin.command:

@@ -1,0 +1,65 @@
+#cloud-config
+# https://ubuntu.com/server/docs/install/autoinstall-reference
+# https://gist.github.com/hmenke/5b7519aa7eea1d1d231ef6df65bfeb79
+autoinstall:
+  version: 1
+
+  identity:
+      hostname: bob
+      username: gabriel
+      password: $6$wInyovvIi0K2pD$iw3u3owRf1X.5H8RLK3CwEQ0eGiTLyr852S56BD00ONvgQvOVRk.k3MCIO/aICji98Oz3uzXdAxla05MQ0VUa/
+
+  packages:
+    - curl
+    - vim
+    - git
+    - whois
+
+  # does this even do anything?
+  package_update: true
+  package_upgrade: true
+
+  # completely ignored (probably because interactive)
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 8G
+
+  ssh:
+    allow-pw: true
+    install-server: true
+    authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICST/387GTgu9qAPn92kzTsEyaXu6fdPryg4z+1azovj gabriel@marim
+
+  keyboard:
+    layout: en
+    variant: us
+
+  locale: en_US.UTF-8
+
+  user-data:
+    timezone: America/Toronto
+
+  network:
+    renderer: networkd
+    ethernets:
+      enp2s0:
+        dhcp4: no
+        dhcp6: no
+    version: 2
+
+    bridges:
+      br0:
+        interfaces: [enp2s0]
+        addresses: [192.168.50.172/24]
+        gateway4: 192.168.50.1
+        mtu: 1500
+        nameservers:
+          addresses: [192.168.50.4, 192.168.50.1]
+        parameters:
+          stp: true
+          forward-delay: 4
+
+  late-commands:
+    - date > /etc/server_release.txt

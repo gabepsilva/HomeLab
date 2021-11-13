@@ -1,0 +1,50 @@
+# configure network,
+# install and configure qemu-kvm and lxd
+---
+- hosts: '{{target}}'
+  remote_user: '{{user}}'
+  become: true
+
+
+  tasks:
+    - name: backup /etc/netplan/00-installer-config.yaml
+      ansible.builtin.copy:
+        src: /etc/netplan/00-installer-config.yaml
+        dest: /etc/netplan/00-installer-config.yaml.bkp
+        remote_src: yes
+        backup: yes
+
+    - name: Create br0 bridge interface
+      copy:
+        dest: "/etc/netplan/00-installer-config.yaml"
+        content: |
+          network:
+          renderer: networkd
+          ethernets:
+            enp2s0:
+              dhcp4: no
+              dhcp6: no
+          version: 2
+
+          bridges:
+            br0:
+              interfaces: [enp2s0]
+              addresses: [192.168.50.173/24]
+              gateway4: 192.168.50.1
+              mtu: 1500
+              nameservers:
+                addresses: [192.168.50.4, 192.168.50.1]
+              parameters:
+                stp: true
+                forward-delay: 4
+
+    - name: Run command if /path/to/database does not exist (with 'cmd' parameter)
+      ansible.builtin.command:
+        cmd: dhclient -r enp2s0
+
+     - name: restart network interface
+      ansible.builtin.command:
+        cmd: ifconfig enp2s0 down ; ifconfig enp2s0
+
+      #sudo systemctl restart systemd-networkd
+      #sudo systemctl status systemd-networkd
