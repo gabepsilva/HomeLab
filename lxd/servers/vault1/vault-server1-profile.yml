@@ -24,16 +24,17 @@ config:
     bootcmd:
       - date > /etc/server_release
       
-    write_files:
-      - content: |
-          network:
-            version: 2
-            ethernets:
-              eth0:
-                dhcp4: no
-                addresses: [192.168.50.11/24]
-                gateway4: 192.168.50.1
-                nameservers:
-                  addresses: [192.168.50.4, 192.168.50.1]
-
-        path: /etc/netplan/50-cloud-init.yaml
+  user.network-config: |
+    version: 1
+    config:
+      - type: physical
+        name: eth0
+        subnets:
+          - type: static
+            ipv4: true
+            address: 192.168.50.11
+            netmask: 255.255.255.0
+            gateway: 192.168.50.1
+            control: auto
+      - type: nameserver
+        address: 192.168.50.1
