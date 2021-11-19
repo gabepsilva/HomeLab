@@ -18,7 +18,7 @@
 export SERVER_USER=<host user>
 export BECOME_PWD=<host user pwd>
 # Provision the LXC container
-ansible-playbook  lxd/servers/vault1/ansible-create-vault-server.yml -i ansible/inventory.yml --extra-vars "target=bob root_folder=${PWD} ansible_become_pass=${BECOME_PWD}"
+ansible-playbook  lxd/servers/vault1/ansible-create-vault-server.yml -i ansible/inventory.yml --extra-vars "target=bob root_folder=${PWD}"
 # Install and configure vault
 export SERVER_USER=<server user>
 export BECOME_PWD=<server user pwd>

@@ -13,6 +13,14 @@
         src: "{{root_folder}}/lxd/create-profiles.sh"
         dest: /tmp/create-profiles.sh
 
+    - name: Copy preseed file
+      ansible.builtin.copy:
+        src: "{{root_folder}}/lxd/lxd-preseed.yml"
+        dest: /tmp/lxd-preseed.yml
+
+    - name: ingest preseed file
+      ansible.builtin.command: bash -c "lxd init --preseed < /tmp/lxd-preseed.yml"
+
     - name: Execute script for profile creation
       ansible.builtin.command: bash /tmp/create-profiles.sh
 
@@ -25,3 +33,8 @@
       file:
         state: absent
         path: "/tmp/create-profiles.sh"
+
+    - name: Delete script 
+      file:
+        state: absent
+        dest: /tmp/lxd-preseed.yml
