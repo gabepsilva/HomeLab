@@ -6,7 +6,7 @@
 | :--------- | :------------------- |
 | TYPE       | LXD Container        |
 | HOST       | jenkins-node1.psilva.org       |
-| IP         | 192.168.50.178        |
+| IP         | 192.168.50.12        |
 | OS         | Ubuntu 20.04.3 LTS   |
 | CPU        | no restrictions      |
 | RAM        | no restrictions      |

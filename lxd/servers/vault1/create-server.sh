@@ -10,15 +10,3 @@ lxc launch \
     -p network-lvl1.yml \
     -p vault-server1.yml \
     images:ubuntu/focal/cloud vault-server1
-
-
-LAST_OUTPUT=$?
-
-if [ $LAST_OUTPUT -ne 0 ]
-then
-    exit $LAST_OUTPUT
-fi
-
-sleep 20
-
-lxc restart vault-server1
