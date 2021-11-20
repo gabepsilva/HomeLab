@@ -13,7 +13,7 @@
 
     - name: Install Utils
       apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois', 'cron', 'jq', 'net-tools']
+      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois', 'cron', 'jq', 'net-tools', 'htop']
 
     - name: Clean apt cache
       command:

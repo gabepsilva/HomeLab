@@ -6,5 +6,7 @@ homelab:
       ansible_host: bob.psilva.org
     jenkins_node1:
       ansible_host: jenkins-node1.psilva.org
+    jenkins_master:
+      ansible_host: jenkins.psilva.org
     vault_server1:
       ansible_host: vault1.psilva.org

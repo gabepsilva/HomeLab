@@ -1,0 +1,46 @@
+---
+- hosts: 'jenkins_node1'
+  remote_user: '{{user}}'
+  gather_facts: no
+  become: true
+
+  tasks:
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install JDK
+      apt: name={{ item }} state=latest update_cache=yes
+      loop: [ 'default-jre']
+
+    - name: Clean apt cache
+      command:
+        cmd: apt-get clean
+
+
+    - name: Set JK master secret
+      become: no
+      copy:
+        dest: "/home/jenkins/master_secret"
+        content: |
+          {{master_secret}}
+        mode: 0400
+        owner: jenkins
+
+    - name: Download agent
+      become: no
+      get_url:
+        url: http://jenkins.psilva.org:8080/jnlpJars/agent.jar
+        dest: /home/jenkins/agent.jar
+        mode: '0700'
+           
+
+    - name: Ensure Jenkins agent is set at boot
+      become: no
+      ansible.builtin.cron:
+        name: "JK agent"
+        special_time: reboot
+        job: "java -jar /home/jenkins/agent.jar -jnlpUrl http://jenkins.psilva.org:8080/computer/node1/jenkins-agent.jnlp -secret @/home/jenkins/master_secret -workDir '/home/jenkins/workspace'"
+

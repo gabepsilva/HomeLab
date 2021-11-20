@@ -15,14 +15,10 @@
 # Deploying Service
 
 ```bash
-export SERVER_USER=<host user>
-export BECOME_PWD=<host user pwd>
-# Provision the LXC container
+# Provision the LXC Vault container
 ansible-playbook  lxd/servers/vault1/ansible-create-vault-server.yml -i ansible/inventory.yml --extra-vars "target=bob root_folder=${PWD}"
 # Install and configure vault
-export SERVER_USER=<server user>
-export BECOME_PWD=<server user pwd>
-ansible-playbook  ansible/servers/vault1.yml -i ansible/inventory.yml --extra-vars "user=$SERVER_USER target=vault_server1 ansible_become_pass=${BECOME_PWD}" 
+ansible-playbook  ansible/servers/vault1.yml -i ansible/inventory.yml --extra-vars "user=$VAULT1_USER target=vault_server1 ansible_become_pass=${VAULT1_SUDO_PASS}" 
 ```
 
 Since Ansible LXC module is not mature enouth we are using a bash script to create the server profile and start the container 

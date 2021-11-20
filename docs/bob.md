@@ -29,12 +29,10 @@ In case I need to recreate the server due to some disaster follow the steps bell
 * After the installation run the following playbooks:
 
 ```bash
-export SERVER_USER=<bob user>
-export BECOME_PWD=<password>
-ansible-playbook  ansible/general/installUtils.yml          -i ansible/inventory.yml --extra-vars "user=$SERVER_USER target=bob ansible_become_pass=${BECOME_PWD}"
-ansible-playbook  ansible/general/installDocker.yml         -i ansible/inventory.yml --extra-vars "user=$SERVER_USER target=bob ansible_become_pass=${BECOME_PWD}" 
-ansible-playbook  ansible/general/installVirtualization.yml -i ansible/inventory.yml --extra-vars "user=$SERVER_USER target=bob ansible_become_pass=${BECOME_PWD}"
-ansible-playbook  ansible/general/installLxdProfiles.yml    -i ansible/inventory.yml --extra-vars "target=bob root_folder=${PWD} ansible_become_pass=${BECOME_PWD}"
-ansible-playbook  ansible/general/reboot.yml                -i ansible/inventory.yml --extra-vars "user=$SERVER_USER target=bob ansible_become_pass=${BECOME_PWD}"
+ansible-playbook  ansible/general/installUtils.yml          -i ansible/inventory.yml --extra-vars "user=$BOB_USER target=bob ansible_become_pass=${BOB_SUDO_PASS}"
+ansible-playbook  ansible/general/installDocker.yml         -i ansible/inventory.yml --extra-vars "user=$BOB_USER target=bob ansible_become_pass=${BOB_SUDO_PASS}" 
+ansible-playbook  ansible/general/installVirtualization.yml -i ansible/inventory.yml --extra-vars "user=$BOB_USER target=bob ansible_become_pass=${BOB_SUDO_PASS}"
+ansible-playbook  ansible/general/installLxdProfiles.yml    -i ansible/inventory.yml --extra-vars "target=bob root_folder=${PWD} ansible_become_pass=${BOB_SUDO_PASS}"
+ansible-playbook  ansible/general/reboot.yml                -i ansible/inventory.yml --extra-vars "user=$BOB_USER target=bob ansible_become_pass=${BOB_SUDO_PASS}"
 ```
 

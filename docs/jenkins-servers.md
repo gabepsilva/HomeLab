@@ -1,3 +1,29 @@
+# Jenkins Master
+
+## Specs
+
+| hostname   | bob                  |
+| :--------- | :------------------- |
+| TYPE       | Docker Container        |
+| HOST       | jenkins.psilva.org       |
+| IP         | 192.168.50.10        |
+| OS         | -   |
+| CPU        | no restrictions      |
+| RAM        | no restrictions      |
+| Disk       | volume mapped to host|
+
+
+
+```bash
+# Provision the LXC Jenkins Master Docker container
+ansible-playbook  ansible/servers/jenkins_master.yml -i ansible/inventory.yml --extra-vars "target=bob user=${BOB_USER}"
+```
+
+Now you can login into your new server at 
+http://jenkins.psilva.org:8080
+
+
+
 # Jenkins Node1
 
 ## Specs
@@ -15,18 +41,17 @@
 # Deploying Service
 
 ```bash
-export SERVER_USER=<host user>
-export BECOME_PWD=<host user pwd>
-# Provision the LXC container
+# Provision Jenkins node1 LXC container
 ansible-playbook  lxd/servers/jenkins-node1/ansible-create-node1.yml -i ansible/inventory.yml --extra-vars "target=bob root_folder=${PWD}"
-# Install and configure vault
-export SERVER_USER=<server user>
-export BECOME_PWD=<server user pwd>
-ansible-playbook  ansible/servers/vault1.yml -i ansible/inventory.yml --extra-vars "user=$SERVER_USER target=vault_server1 ansible_become_pass=${BECOME_PWD}" 
+# Install agent.jar and configure it
+ansible-playbook  ansible/servers/jenkins_master_setup.yml -i ansible/inventory.yml --extra-vars "master_secret=$AGENT_SECRET user=$JK_NODE1_USER" 
+ansible-playbook  ansible/general/reboot.yml               -i ansible/inventory.yml --extra-vars "target=jenkins_node1 user=$JK_NODE1_USER ansible_become_pass=${JK_NODE1_SUDO_PASS}"
 ```
 
 Since Ansible LXC module is not mature enouth we are using a bash script to create the server profile and start the container 
 
+
+no password for sudo ?
 
 ## Data to be backed up regularly
 
