@@ -12,7 +12,17 @@
 | RAM        | no restrictions      |
 | Disk       | volume mapped to host|
 
+```bash
+# Provision the LXD containers for Jenkins Master and Node1
+ansible-playbook servers/jenkins/1-create-jenkins-containers.yml -i ansible/inventory.yml --extra-vars="target=bob root_folder=${PWD}"
+# Install Jenkins on the master
+ansible-playbook servers/jenkins/2-install-jenkins-master.yml    -i ansible/inventory.yml --extra-vars="user=${JK_MASTER_USER} ansible_become_pass=${JK_MASTER_SUDO_PASS}" 
+# Install Jenkins node1 after master is properly configured
+ansible-playbook  servers/jenkins/3-install-jenkins-node1.yml    -i ansible/inventory.yml --extra-vars "target=jenkins_node1 master_secret=$AGENT_SECRET user=$JK_NODE1_USER ansible_become_pass=${JK_NODE1_SUDO_PASS}"
+ansible-playbook  ansible/general/installDocker.yml              -i ansible/inventory.yml --extra-vars "user=$JK_NODE1_USER target=jenkins_node1 ansible_become_pass=${JK_NODE1_SUDO_PASS}" 
+ansible-playbook  ansible/general/reboot.yml                     -i ansible/inventory.yml --extra-vars "target=jenkins_node1 user=$JK_NODE1_USER ansible_become_pass=${JK_NODE1_SUDO_PASS}"
 
+```
 
 ```bash
 # Provision the LXC Jenkins Master Docker container
