@@ -1,0 +1,29 @@
+---
+- hosts: 'jenkins_master'
+  remote_user: '{{user}}'
+  gather_facts: no
+  become: yes
+
+  tasks:
+      - name: ensure the jenkins apt repository key is installed
+        apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+
+      - name: ensure the repository is configured
+        apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+
+      - name: Update and upgrade apt packages
+        become: true
+        apt:
+          upgrade: yes
+          update_cache: yes
+
+      - name: Install packages
+        apt: name={{ item }} state=latest update_cache=yes
+        loop: [ 'default-jre', 'jenkins']
+
+      - name: Clean apt cache
+        command:
+          cmd: apt-get clean
+
+      - name: ensure jenkins is running
+        service: name=jenkins state=started

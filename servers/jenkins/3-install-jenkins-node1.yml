@@ -19,7 +19,6 @@
       command:
         cmd: apt-get clean
 
-
     - name: Set JK master secret
       become: no
       copy:
