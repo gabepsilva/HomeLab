@@ -3,7 +3,7 @@ FROM squidfunk/mkdocs-material as builder
 
 MAINTAINER github.com/gabrielpsilva
 
-WORKDIR /opt
+WORKDIR /build
 ADD docs-config/mkdocs.yml ./
 ADD docs ./docs
 RUN mkdocs build
