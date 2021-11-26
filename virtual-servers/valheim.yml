@@ -1,0 +1,36 @@
+---
+
+- hosts: 'captain'
+  remote_user: '{{user}}'
+  become: false
+  gather_facts: no
+
+  tasks:
+    - name: Creates Valheim volume
+      file:
+        path: /hdd-pool/appdata/valheim-server
+        state: directory
+        owner: '{{user}}'
+        group: '{{user}}'
+        mode: 0700
+        recurse: yes
+      
+    - name: Create Valheim container
+      docker_container:
+        name: valheim
+        image: lloesche/valheim-server
+        state: started
+        pull: yes
+        restart_policy: unless-stopped
+        container_default_behavior: no_defaults
+        ports:
+          - "2456-2457:2456-2457/udp"
+        volumes:
+          - /hdd-pool/appdata/valheim-server/config/:/config/
+          - /hdd-pool/appdata/valheim-server/data/:/opt/valheim/
+        env:
+          SERVER_NAME: "ADRB"
+          WORLD_NAME: "pirocoptero"
+          SERVER_PASS: "11111111"
+          TZ: "America/Toronto"
+          

@@ -1,4 +1,6 @@
 config:
+  security.nesting: true
+
   user.user-data: |
     #cloud-config
     timezone: America/Toronto

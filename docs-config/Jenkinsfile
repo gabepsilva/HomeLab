@@ -28,6 +28,8 @@ pipeline {
         stage('Deploy') {
             steps{
 
+                echo "TODO"
+
                 /*
                     enable this after vault installation and creation of a service account with credentials saved in vault
 

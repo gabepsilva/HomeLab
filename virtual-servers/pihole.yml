@@ -1,0 +1,33 @@
+---
+
+- hosts: 'captain'
+  remote_user: '{{user}}'
+  become: false
+  gather_facts: no
+
+  tasks:
+    - name: Creates Pihole volume
+      file:
+        path: /hdd-pool/appdata/pihole
+        state: directory
+        owner: '{{user}}'
+        group: '{{user}}'
+        mode: 0700
+        recurse: yes
+      
+    - name: Create Pihole container
+      docker_container:
+        name: pihole
+        image: pihole/pihole
+        state: started
+        pull: yes
+        restart_policy: unless-stopped
+        container_default_behavior: no_defaults
+        network_mode: bridge
+        networks:
+          - name: "macvlan24"
+            ipv4_address: "192.168.50.4"
+        volumes:
+          - /hdd-pool/appdata/pihole/pihole/:/etc/pihole/
+          - /hdd-pool/appdata/pihole/dnsmasq.d/:/etc/dnsmasq.d/
+        

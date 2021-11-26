@@ -21,6 +21,11 @@
         apt: name={{ item }} state=latest update_cache=yes
         loop: [ 'default-jre', 'jenkins']
 
+      - lineinfile:
+          path: /etc/default/jenkins
+          regexp: '^HTTP_PORT='
+          line: 'HTTP_PORT=80'
+
       - name: Clean apt cache
         command:
           cmd: apt-get clean
