@@ -18,14 +18,16 @@ pipeline {
             steps{
 
                 withCredentials([usernamePassword(credentialsId: 'gh-90', passwordVariable: 'ghuserpass', usernameVariable: 'ghuser')]) {
-                     
-                    sh '''
+                    //sh 'echo $ghuserpass | docker login -u $ghuser --password-stdin https://$registry'
+                    
+                    //sh 'mkdir -p ./docker'
+                    sh "
                         mkdir -p ./docker
+                        printf '{\"credHelpers\": {\"${registry}\": \"registryhelper\" } }' > './docker/config.json' 
+                        cat ./docker/config.json
                         echo $ghuserpass | docker --config ./docker/ login -u $ghuser --password-stdin  https://$registry
-                        docker push ${registry}
-                        #innective when running on a SSD
-                        #shred -uvz ./docker/config.json
-                    '''
+                        sh "docker push ${registry}"
+                    "                        
                 }
             }
         }
@@ -33,15 +35,16 @@ pipeline {
         stage('Deploy') {
             steps{
 
-                sh ''' 
-                    sshpass -p PASS \
-                        ssh user_name@hostmachine bash -c bash -c "'
-                            docker stop docs
-                            docker rm docs
-                            docker pull ghcr.io/gabrielpsilva/homelab-docs
-                            docker run -d --name docs -p 80:80 --network macvlan24 --ip 192.168.50.2 ghcr.io/gabrielpsilva/homelab-docs:latest
-                        '"
-                '''                
+                echo "TODO"
+
+                /*
+                    enable this after vault installation and creation of a service account with credentials saved in vault
+
+                    
+                sh "sshpass -p PASS \
+                    ssh user_name@hostmachine 'docker run --rm -d --name HomeLabDocs -p 8081:80 ghcr.io/gabrielpsilva/homelab-docs'"
+
+                */
             }
         }
     }
