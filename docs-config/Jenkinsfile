@@ -23,7 +23,7 @@ pipeline {
                     //sh 'mkdir -p ./docker'
                     writeFile file: './docker/config.json', text: '''{
   "credHelpers": {
-    "$registry":  "registryhelper"
+    "${registry}":  "registryhelper"
   }
 }'''
                     sh '''
@@ -53,10 +53,8 @@ pipeline {
         }
     }
     post {
-        // Clean after build
         always {
-            echo nada
-            //cleanWs deleteDirs: true
+            cleanWs deleteDirs: true
         }
     }
 }
