@@ -27,8 +27,10 @@ pipeline {
                         
                         cat ./docker/config.json
                         echo ${ghuserpass} | docker --config ./docker/ login -u ${ghuser} --password-stdin  https://${registry}
-                        docker push ${registry}
-                    '''                        
+                       
+                    ''' 
+
+                    sh " docker push ${registry}"                       
                 }
             }
         }
