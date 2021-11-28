@@ -30,15 +30,18 @@ pipeline {
         stage('Deploy') {
             steps{
 
-               sh ''' 
-                    sshpass -p PASS \
-                        ssh user_name@hostmachine bash -c bash -c "'
-                            docker stop docs
-                            docker rm docs
-                            docker pull ghcr.io/gabrielpsilva/homelab-docs
-                            docker run -d --name docs -p 80:80 --network macvlan24 --ip 192.168.50.2 ghcr.io/gabrielpsilva/homelab-docs:latest
-                        '"
-                '''
+                withCredentials([usernamePassword(credentialsId: 'g-captain', passwordVariable: 'capuserpass', usernameVariable: 'capuser')]) {
+
+                    sh ''' 
+                        sshpass -p $capuserpass \
+                            ssh capuser@captain.psilva.org bash -c bash -c "'
+                                docker stop docs
+                                docker rm docs
+                                docker pull ghcr.io/gabrielpsilva/homelab-docs
+                                docker run -d --name docs -p 80:80 --network macvlan24 --ip 192.168.50.2 ghcr.io/gabrielpsilva/homelab-docs:latest
+                            '"
+                    '''
+                }
             }
         }
     }
