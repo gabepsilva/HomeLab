@@ -34,7 +34,7 @@ pipeline {
 
                     sh ''' 
                         sshpass -p $capuserpass \
-                            ssh capuser@captain.psilva.org bash -c bash -c "'
+                            ssh $capuser@captain.psilva.org bash -c bash -c "'
                                 docker stop docs
                                 docker rm docs
                                 docker pull ghcr.io/gabrielpsilva/homelab-docs
