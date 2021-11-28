@@ -12,6 +12,7 @@
 | RAM        | no restrictions      |
 | Disk       | volume mapped to host|
 
+## LXD Version
 ```bash
 # Provision the LXD containers for Jenkins Master and Node1
 ansible-playbook servers/jenkins/1-create-jenkins-containers.yml -i ansible/inventory.yml --extra-vars="target=bob root_folder=${PWD}"
@@ -27,9 +28,15 @@ ansible-playbook  ansible/general/reboot.yml                     -i ansible/inve
 
 ```
 
+# Docker Version
 ```bash
 # Provision the LXC Jenkins Master Docker container
-ansible-playbook  ansible/servers/jenkins_master.yml -i ansible/inventory.yml --extra-vars "target=bob user=${BOB_USER}"
+ansible-playbook  virtual-servers/jenkins/docker/jenkins_master.yml -i ansible/inventory.yml --extra-vars "target=captain"
+
+# intsall default-jre in the remote node
+wget http://jenkins.psilva.org:8080/jnlpJars/agent.jar
+java -jar agent.jar -jnlpUrl http://jenkins.psilva.org:8080/computer/node1/jenkins-agent.jnlp -secret @jenkins_remote_secret -workDir "/tmp/jenkins_remote_root"
+
 ```
 
 Now you can login into your new server at 

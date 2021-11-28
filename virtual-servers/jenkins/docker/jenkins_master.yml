@@ -1,16 +1,16 @@
 ---
 
 - hosts: '{{target}}'
-  remote_user: '{{user}}'
-  become: false
+  #remote_user: '{{user}}'
+  #become: false
 
   tasks:
     - name: Creates Jenkins volume
       file:
-        path: /home/{{user}}/jenkins_home
+        path: /hdd-pool/appdata/jenkins
         state: directory
-        owner: '{{user}}'
-        group: '{{user}}'
+        #owner: '{{user}}'
+        #group: '{{user}}'
         mode: 0760
         recurse: yes
       
@@ -25,11 +25,11 @@
         network_mode: bridge
         networks:
           - name: "macvlan24"
-            ipv4_address: "192.168.50.10"
+            ipv4_address: "192.168.50.9"
 
         ports:
           - "8080:8080"
           - "50000:50000"
         volumes:
-          - /home/{{user}}/jenkins_home:/var/jenkins_home
+          - /hdd-pool/appdata/jenkins:/var/jenkins_home
         
