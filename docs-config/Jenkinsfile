@@ -22,11 +22,11 @@ pipeline {
                     sh '''
                         mkdir -p ./docker
                         echo $ghuserpass | docker --config ./docker/ login -u $ghuser --password-stdin  https://$registry
-                        shred -uvz ./docker/config.json
+                        docker push ${registry}
+                        #innective when running on a SSD
+                        #shred -uvz ./docker/config.json
                     '''
                 }
-
-                sh "docker push ${registry}"
             }
         }
 
