@@ -20,10 +20,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'gh-90', passwordVariable: 'ghuserpass', usernameVariable: 'ghuser')]) {
                     //sh 'echo $ghuserpass | docker login -u $ghuser --password-stdin https://$registry'
                     
-                    sh 'mkdir -p ./docker'
+                    //sh 'mkdir -p ./docker'
                     writeFile file: './docker/config.json', text: '''{
   "credHelpers": {
-    "$registry":  ""
+    "$registry":  "registryhelper"
   }
 }'''
                     sh '''
