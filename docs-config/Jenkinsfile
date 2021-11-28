@@ -21,11 +21,14 @@ pipeline {
                     //sh 'echo $ghuserpass | docker login -u $ghuser --password-stdin https://$registry'
                     
                     //sh 'mkdir -p ./docker'
-                    writeFile file: './docker/config.json', text: """{
-  "credHelpers": {
-    "${registry}":  "registryhelper"
-  }
-}"""
+                    writeFile file: './docker/config.json', text: """
+                    {
+                        "credHelpers": {
+                            "${registry}":  "registryhelper"
+                        }
+                    }
+                    """
+
                     sh '''
                         cat ./docker/config.json
                         echo $ghuserpass | docker --config ./docker/ login -u $ghuser --password-stdin  https://$registry
