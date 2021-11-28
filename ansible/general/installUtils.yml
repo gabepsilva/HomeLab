@@ -13,7 +13,7 @@
 
     - name: Install Utils
       apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois', 'cron', 'jq', 'net-tools', 'htop', 'sysstat']
+      loop: [ 'vim', 'git', 'curl', 'rsync', 'whois', 'cron', 'jq', 'net-tools', 'htop', 'sysstat', 'sshpass']
 
     - name: Install gotop
       community.general.snap:
