@@ -26,7 +26,7 @@ pipeline {
                         
                         
                         cat ./docker/config.json
-                        echo ${ghuserpass} | docker --config ./docker/ login -u ${ghuser} --password-stdin  https://${registry}
+                        echo $ghuserpass | docker --config ./docker/ login -u $ghuser --password-stdin  https://$registry
                        
                     ''' 
 
