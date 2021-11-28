@@ -21,8 +21,8 @@ pipeline {
                     //sh 'echo $ghuserpass | docker login -u $ghuser --password-stdin https://$registry'
                     sh """
                         mkdir ./docker
-                        echo "{\"credHelpers\": {\"$registry\": \"\"}}" > ./docker/config.json
-                        docker --config ./docker login -u $ghuser -p $ghuserpass https://$registry
+                        #echo "{\"credHelpers\": {\"$registry\": \"\"}}" > ./docker/config.json
+                        echo $ghuserpass | docker --config ./docker login -u $ghuser --password-stdin  https://$registry
                     """
                 }
 
@@ -44,6 +44,12 @@ pipeline {
 
                 */
             }
+        }
+    }
+    post {
+        // Clean after build
+        always {
+            cleanWs deleteDirs: true
         }
     }
 }
