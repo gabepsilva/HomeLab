@@ -20,7 +20,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'gh-90', passwordVariable: 'ghuserpass', usernameVariable: 'ghuser')]) {
                     
                     sh 'mkdir ./docker'
-                    sh "echo {\"credHelpers\": {\"$REGISTRY_HOST\": \"\"}} > ./docker/config.json"
+                    sh "echo {\"credHelpers\": {\"${registry}\": \"\"}} > ./docker/config.json"
                     
                     sh '''
                         
