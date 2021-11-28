@@ -21,8 +21,8 @@ pipeline {
                     //sh 'echo $ghuserpass | docker login -u $ghuser --password-stdin https://$registry'
                     sh '''
                         mkdir ./docker
-                        #echo "{\"credHelpers\": {\"$registry\": \"\"}}" > ./docker/config.json
-                        echo $ghuserpass | docker --config ./docker login -u $ghuser --password-stdin  https://$registry
+                        echo "{\"credHelpers\": {\"$registry\": \"\"}}" > ./docker/config.json
+                        echo $ghuserpass | docker --config ./docker/config.json login -u $ghuser --password-stdin  https://$registry
                     '''
                 }
 
