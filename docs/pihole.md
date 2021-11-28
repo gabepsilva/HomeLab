@@ -19,8 +19,12 @@ Pi-hole is a Linux network-level advertisement and Internet tracker blocking app
 
 ## Deploying
 
+Just apply [this Ansinble playbook](https://github.com/gabrielpsilva/HomeLab/blob/main/virtual-servers/pihole.yml) to the host
+
 ```bash
-ansible-playbook  virtual-servers/pihole.yml -i ansible/inventory.yml --extra-vars "user=$CAPTAIN_USER"
+ansible-playbook  virtual-servers/pihole.yml \
+    -i ansible/inventory.yml \
+    --extra-vars "user=$CAPTAIN_USER"
 ```
 
 After the container creation log into it and change the admin passowrd.
@@ -31,7 +35,7 @@ docker exec -it pihole bash
 pihole -a -p
 ```
 
-## DNS RECORDS
+## DNS Records
 
 
 | servername           | host    | type     | IP             |
@@ -43,6 +47,7 @@ pihole -a -p
 | plex.psilva.org      | captain | docker   | 192.168.50.6   |
 | speedtest.psilva.org | captain | docker   | 192.168.50.8   |
 | vault1.psilva.org    | captain | docker   | 192.168.50.11  |
+| docs.psilva.org      | captain | docker   | 192.168.50.2   |
 
 ## Backup Plan
 
