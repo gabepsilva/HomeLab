@@ -1,0 +1,26 @@
+---
+- hosts: '{{target}}'
+  gather_facts: no
+
+  tasks:
+
+    - name: Copy profile yaml to server
+      ansible.builtin.copy:
+        src: "{{root_folder}}/services/samba" 
+        dest: /tmp/
+
+    - name: "Create Samba server container"
+      command: "{{ item }}"
+      loop:
+        - lxc profile create samba-server
+        - bash -c "cat /tmp/samba/lxd/profiles/samba-profile.yml | lxc profile edit samba-server"
+        - lxc init -p conf-autostart-on.yml -p disk-std.yml -p network-lvl1.yml -p samba-server images:ubuntu/focal/cloud  samba-server
+        - lxc config device add samba-server samba-mount disk source=/hdd-pool/ path=/shares
+        - lxc config set samba-server raw.idmap "both 1000 1000"
+        - lxc start samba-server
+
+    - name: Delete script 
+      file:
+        state: absent
+        path: "/tmp/samba"
+        

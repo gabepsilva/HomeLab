@@ -1,0 +1,22 @@
+---
+- hosts: 'samba_server'
+  remote_user: '{{user}}'
+  gather_facts: no
+  become: yes
+
+  tasks:
+      - name: Update and upgrade apt packages
+        apt:
+          upgrade: yes
+          update_cache: yes
+
+      - name: Install packages
+        apt: name={{ item }} state=latest update_cache=yes
+        loop: [ 'samba']
+
+      - name: Clean apt cache
+        command:
+          cmd: apt-get clean
+
+      - name: ensure samba is running
+        service: name=smbd state=started
