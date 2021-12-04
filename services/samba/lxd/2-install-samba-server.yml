@@ -18,5 +18,12 @@
         command:
           cmd: apt-get clean
 
-      - name: ensure samba is running
-        service: name=smbd state=started
+      - name: Copy profile yaml to server
+        ansible.builtin.copy:
+          src: "{{root_folder}}/services/samba/smb.conf" 
+          dest: /etc/samba/smb.conf
+        
+      - name: Restart service smbd, in all cases
+        ansible.builtin.service:
+          name: smbd
+          state: restarted

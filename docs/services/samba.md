@@ -26,7 +26,7 @@ Just apply [this Ansinble playbook](https://github.com/gabrielpsilva/HomeLab/blo
 # Provision the LXD container
 ansible-playbook services/samba/lxd/1-create-samba-container.yml -i ansible/inventory.yml --extra-vars="target=captain root_folder=${PWD}"
 # Install samba server
-ansible-playbook services/samba/lxd/2-install-samba-server.yml    -i ansible/inventory.yml --extra-vars="user=${SAMBA_USER} ansible_become_pass=${SAMBA_SUDO_PASS}" 
+ansible-playbook services/samba/lxd/2-install-samba-server.yml    -i ansible/inventory.yml --extra-vars="user=${SAMBA_USER} ansible_become_pass=${SAMBA_SUDO_PASS} root_folder=${PWD}"
 
 # configure jenkins master before continuing ...
 
