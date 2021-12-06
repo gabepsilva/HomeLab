@@ -1,0 +1,27 @@
+---
+- hosts: 'pihole'
+  remote_user: '{{user}}'
+  gather_facts: no
+  become: yes
+
+  tasks:
+      - name: Update and upgrade apt packages
+        apt:
+          upgrade: yes
+          update_cache: yes
+
+      - name: Install dependencies
+        apt: name={{ item }} state=latest update_cache=yes
+        loop: ['curl']
+
+      - name: Install Pihole
+        register: hello
+        ansible.builtin.shell:
+          cmd: 'curl -L https://install.pi-hole.net | sudo bash /dev/stdin --unattended'
+
+      - debug: msg="{{ hello.stdout }}"
+      - debug: msg="{{ hello.stderr }}"
+
+      - name: Clean apt cache
+        command:
+          cmd: apt-get clean

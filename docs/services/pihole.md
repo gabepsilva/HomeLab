@@ -4,8 +4,28 @@ Pi-hole is a Linux network-level advertisement and Internet tracker blocking app
 
 [Wikipedia](https://https://en.wikipedia.org/wiki/Pi-hole)
 
-## Specs
 
+## LXD Version
+
+```bash
+
+# 1 - Provision the LXD container
+# 2 - Install pihole server
+ansible-playbook services/pihole/lxd/1-create-pihole-container.yml -i ansible/inventory.yml --extra-vars="target=captain root_folder=${PWD}" 
+sleep 15 
+ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook services/pihole/lxd/2-install-pihole.yml          -i ansible/inventory.yml --extra-vars="user=${PIHOLE_USER} ansible_become_pass=${PIHOLE_SUDO_PASS} root_folder=${PWD}"
+
+```
+
+dont forget to set user password
+```
+sudo pihole -a -p
+```
+
+
+
+# Docker Version
+## Specs
 
 | Service | Pihole                           |
 | :-------- | :--------------------------------- |

@@ -1,0 +1,26 @@
+---
+- hosts: 'samba_server'
+  gather_facts: no
+  become: yes
+
+  vars:
+    smb_users:
+      - gabriel
+      - plex
+    
+  tasks:
+    - name: Add several users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        create_home: no
+        state: present
+        groups: ["sambashare"]
+      loop: "{{smb_users}}"
+
+    - name: Add users default creds
+      command: echo -ne "1\n1\n" | smbpasswd -a -s "{{ item }}"
+      loop: "{{smb_users}}"
+
+    - name: Add users default creds
+      command: echo -ne "1\n1\n" | smbpasswd -a -s "{{ item }}"
+      loop: "{{smb_users}}"

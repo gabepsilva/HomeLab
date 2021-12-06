@@ -1,0 +1,41 @@
+config:
+  user.user-data: |
+    #cloud-config
+    timezone: America/Toronto
+    hostname: pihole
+    fqdn: pihole.psilva.org
+    manage_etc_hosts: true
+    package_upgrade: true
+    users:
+      - name: pi
+        home: /home/pi
+        shell: /bin/bash
+        sudo: 'ALL=(ALL) NOPASSWD: ALL'
+        lock_passwd: false
+        passwd: $6$S3ypUo1ddvnnDnBS$IpDgTu21aL13tHoncNqxIGWiObOriVt7fF813vTw/0TZ6pCX7u9POznIGu.xcANezGxooM67qGzqyaVIF0K0R/
+        ssh-authorized-keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICST/387GTgu9qAPn92kzTsEyaXu6fdPryg4z+1azovj gabriel@marim
+
+    ssh_pwauth: true
+    disable_root: true
+
+    packages:
+      - openssh-server
+
+    bootcmd:
+      - date > /etc/server_release
+      
+  user.network-config: |
+    version: 1
+    config:
+      - type: physical
+        name: eth0
+        subnets:
+          - type: static
+            ipv4: true
+            address: 192.168.50.4
+            netmask: 255.255.255.0
+            gateway: 192.168.50.1
+            control: auto
+      - type: nameserver
+        address: 192.168.50.1

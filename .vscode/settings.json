@@ -3,6 +3,6 @@
     "editor.fontSize": 13,
     "terminal.integrated.fontFamily": "NotoSansMono Nerd Font",
     "terminal.integrated.fontSize": 12,
-    "editor.wordWrap": "bounded",
-    "diffEditor.wordWrap": "on"
+    "diffEditor.wordWrap": "on",
+    "editor.wordWrap": "on"
 }

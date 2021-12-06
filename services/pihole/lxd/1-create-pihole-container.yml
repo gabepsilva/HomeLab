@@ -1,0 +1,27 @@
+---
+- hosts: '{{target}}'
+  gather_facts: no
+
+  tasks:
+
+    - name: Copy profile yaml to server
+      ansible.builtin.copy:
+        src: "{{root_folder}}/services/pihole" 
+        dest: /tmp/
+
+    - name: "Create pihole server container"
+      command: "{{ item }}"
+      loop:
+        - lxc profile create pihole
+        - bash -c "cat /tmp/pihole/lxd/profiles/pihole-profile.yml | lxc profile edit pihole"
+        - lxc init -p conf-autostart-on.yml -p disk-std.yml -p network-lvl1.yml -p pihole images:ubuntu/focal/cloud  pihole
+        - lxc config device add pihole pihole-etc disk source=/hdd-pool/appdata/pihole-lxd/pihole/ path=/etc/pihole/
+        - lxc config device add pihole pihole-dnsmasq disk source=/hdd-pool/appdata/pihole-lxd/dnsmasq.d/ path=/etc/dnsmasq.d/
+        - lxc config set pihole raw.idmap "both 1000 1000"
+        - lxc start pihole
+
+    - name: Delete script 
+      file:
+        state: absent
+        path: "/tmp/pihole"
+        
