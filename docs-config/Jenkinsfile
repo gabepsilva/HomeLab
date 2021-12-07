@@ -34,7 +34,7 @@ pipeline {
 
                     sh ''' 
                         sshpass -p $capuserpass \
-                            ssh -oStrictHostKeyChecking=no  $capuser@captain.internal.psilva.org bash -c "'
+                            ssh -oStrictHostKeyChecking=no  $capuser@captain.psilva.org bash -c "'
                                 docker stop docs
                                 docker rm docs
                                 docker pull ghcr.io/gabrielpsilva/homelab-docs
