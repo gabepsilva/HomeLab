@@ -21,6 +21,7 @@ pipeline {
             steps {
                 
                 script{ 
+                    sh 'env|sort'
                     currentBuild.result = 'ABORTED'
                     exit("No changes in the documentation")
                 }
