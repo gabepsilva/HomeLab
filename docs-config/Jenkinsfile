@@ -9,13 +9,13 @@ pipeline {
 
         stage('Cull non docs builds') {
             when {
-                not {
+                //not {
                     anyOf {
                         changeset "**/docs/*.*"
                         changeset "**/docs-config/*.*"
                     }
                     
-                }
+                //}
             }
 
             steps {
