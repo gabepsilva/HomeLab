@@ -8,7 +8,18 @@ pipeline {
     stages{
 
         stage('Cull non docs builds') {
-            when { changeset pattern: ".TEST\\.java", comparator: "REGEXP" } or when { changeset pattern: "*/*TEST.java", caseSensitive: true }
+            //when {
+            //    not {
+            //        anyOf {
+            //            changeset "**/docs/*.*"
+            //            changeset "**/docs-config/*.*"
+            //        }
+            //        
+            //    }
+            //}
+
+            when { 
+                changeset pattern: ".TEST\\.java", comparator: "REGEXP" } or when { changeset pattern: "*/*TEST.java", caseSensitive: true }
             steps {
                 
                 script{ 
