@@ -7,6 +7,27 @@ pipeline {
     
     stages{
 
+        stage('Cull non docs builds') {
+            when {
+                not {
+                    anyOf {
+                        changeset "**/docs/*.*"
+                        changeset "**/docs-config/*.*"
+                    }
+                    
+                }
+            }
+            steps {
+                
+                script{ 
+                    currentBuild.result = 'ABORTED'
+                    error("No changes in the documentation")
+                }
+                echo('Skipping mail notification')
+                
+            }
+        }
+
         stage('Build Docs') {
 
             steps {
