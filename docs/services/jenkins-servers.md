@@ -39,7 +39,7 @@ ansible-playbook  ansible/general/reboot.yml                     -i ansible/inve
 
 # Docker Version
 ```bash
-# Provision the LXC Jenkins Master Docker container
+# Provision the LXC Jenkins Master Docker container 
 ansible-playbook  services/jenkins/docker/jenkins_master.yml -i ansible/inventory.yml --extra-vars "target=captain"
 
 # intsall default-jre in the remote node
