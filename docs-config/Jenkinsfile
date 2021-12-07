@@ -13,6 +13,7 @@ pipeline {
                     anyOf {
                         changeset "**/docs/*"
                         changeset "**/docs-config/*"
+                        expression { env.LOGNAME != '' }
                     }
                     
                 }
