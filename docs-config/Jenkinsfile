@@ -11,8 +11,8 @@ pipeline {
             when {
                 //not {
                     anyOf {
-                        changeset "**/docs/*.*"
-                        changeset "**/docs-config/*.*"
+                        changeset "**/docs/*"
+                        changeset "**/docs-config/*"
                     }
                     
                 //}
