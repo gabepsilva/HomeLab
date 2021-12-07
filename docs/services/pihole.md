@@ -17,7 +17,7 @@ ANSIBLE_STDOUT_CALLBACK=debug ansible-playbook services/pihole/lxd/2-install-pih
 
 ```
 
-dont forget to set user password
+dont forget to set user password 
 ```
 sudo pihole -a -p
 ```

@@ -10,6 +10,7 @@ pipeline {
         stage('Build Docs') {
 
             steps {
+                sh 'env|sort'
                 sh "docker build -f docs-config/Dockerfile -t ${registry} ."
             }
         }
@@ -34,7 +35,7 @@ pipeline {
 
                     sh ''' 
                         sshpass -p $capuserpass \
-                            ssh $capuser@192.168.50.220 bash -c "'
+                            ssh -oStrictHostKeyChecking=no  $capuser@captain.psilva.org bash -c "'
                                 docker stop docs
                                 docker rm docs
                                 docker pull ghcr.io/gabrielpsilva/homelab-docs

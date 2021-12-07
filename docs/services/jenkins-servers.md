@@ -28,10 +28,19 @@ ansible-playbook  ansible/general/reboot.yml                     -i ansible/inve
 
 ```
 
+```bash
+### Node2
+ansible-playbook  services/jenkins/lxd/node2/1-create-node2-vm.yml -i ansible/inventory.yml --extra-vars="target=captain root_folder=${PWD}"
+ansible-playbook  ansible/general/installUtils.yml                 -i ansible/inventory.yml --extra-vars "user=$JK_NODE1_USER target=jenkins_node2 ansible_become_pass=${JK_NODE1_SUDO_PASS}"
+ansible-playbook  ansible/general/installDocker.yml                -i ansible/inventory.yml --extra-vars "user=$JK_NODE1_USER target=jenkins_node2 ansible_become_pass=${JK_NODE1_SUDO_PASS}" 
+ansible-playbook  services/jenkins/setup-jenkins-node.yml          -i ansible/inventory.yml --extra-vars "target=jenkins_node2 node_name=node2 master_secret=$AGENT_SECRET_NODE2 user=$JK_NODE1_USER ansible_become_pass=${JK_NODE1_SUDO_PASS}"
+ansible-playbook  ansible/general/reboot.yml                     -i ansible/inventory.yml --extra-vars "target=jenkins_node2 user=$JK_NODE1_USER ansible_become_pass=${JK_NODE1_SUDO_PASS}"
+```
+
 # Docker Version
 ```bash
-# Provision the LXC Jenkins Master Docker container
-ansible-playbook  virtual-servers/jenkins/docker/jenkins_master.yml -i ansible/inventory.yml --extra-vars "target=captain"
+# Provision the LXC Jenkins Master Docker container 
+ansible-playbook  services/jenkins/docker/jenkins_master.yml -i ansible/inventory.yml --extra-vars "target=captain"
 
 # intsall default-jre in the remote node
 wget http://jenkins.psilva.org:8080/jnlpJars/agent.jar

@@ -1,5 +1,5 @@
 ---
-- hosts: 'jenkins_node1'
+- hosts: '{{target}}'
   remote_user: '{{user}}'
   gather_facts: no
   become: true
@@ -41,5 +41,5 @@
       ansible.builtin.cron:
         name: "JK agent"
         special_time: reboot
-        job: "java -jar /home/jenkins/agent.jar -jnlpUrl http://jenkins.psilva.org:8080/computer/node1/jenkins-agent.jnlp -secret @/home/jenkins/master_secret -workDir '/home/jenkins/jk_root'"
+        job: "java -jar /home/jenkins/agent.jar -jnlpUrl http://jenkins.psilva.org:8080/computer/{{node_name}}/jenkins-agent.jnlp -secret @/home/jenkins/master_secret -workDir '/home/jenkins/jk_root'"
 
