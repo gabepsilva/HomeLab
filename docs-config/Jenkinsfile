@@ -21,7 +21,7 @@ pipeline {
             steps {
                 
                 script{ 
-                    sh 'env|sort'
+                    
                     currentBuild.result = 'ABORTED'
                     exit("No changes in the documentation")
                 }
@@ -33,6 +33,7 @@ pipeline {
         stage('Build Docs') {
 
             steps {
+                sh 'env|sort'
                 sh "docker build -f docs-config/Dockerfile -t ${registry} ."
             }
         }
