@@ -19,7 +19,12 @@ pipeline {
             //}
 
             when { 
-                changeset pattern: ".TEST\\.java", comparator: "REGEXP" } or when { changeset pattern: "*/*TEST.java", caseSensitive: true }
+                changeset pattern: ".TEST\\.java", comparator: "REGEXP" 
+            } 
+            or 
+            when { 
+                changeset pattern: "*/*TEST.java", caseSensitive: true 
+            }
             steps {
                 
                 script{ 
