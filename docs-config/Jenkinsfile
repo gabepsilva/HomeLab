@@ -22,6 +22,7 @@ pipeline {
                 
                 script{ 
                     
+                    sh 'env|sort'
                     currentBuild.result = 'ABORTED'
                     error("No changes in the documentation")
                 }
