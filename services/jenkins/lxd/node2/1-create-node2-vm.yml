@@ -1,0 +1,24 @@
+---
+- hosts: '{{target}}'
+  gather_facts: no
+
+  tasks:
+
+    - name: Copy profile yaml to server
+      ansible.builtin.copy:
+        src: "{{root_folder}}/services/jenkins"
+        dest: /tmp/
+
+
+    - name: "Create jenkins node2 VM"
+      command: "{{ item }}"
+      loop:
+        - lxc profile create jenkins-node2 
+        - bash -c "cat /tmp/jenkins/lxd/profiles/jenkins-node2-profile.yml | lxc profile edit jenkins-node2"
+        - lxc launch -p conf-autostart-on.yml -p disk-std.yml -p network-lvl1.yml -p jenkins-node2 images:ubuntu/focal/cloud jenkins-node2 --vm
+
+    - name: Delete script 
+      file:
+        state: absent
+        path: "/tmp/jenkins"
+        

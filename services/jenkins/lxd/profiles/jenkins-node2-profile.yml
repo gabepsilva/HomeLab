@@ -1,0 +1,41 @@
+config:
+
+  user.user-data: |
+    #cloud-config
+    timezone: America/Toronto
+    hostname: jenkins-node2
+    fqdn: jenkins-node2.psilva.org
+    manage_etc_hosts: true
+    package_upgrade: true
+    users:
+      - name: jenkins
+        home: /home/jenkins
+        shell: /bin/bash
+        sudo: ALL=(ALL) ALL
+        lock_passwd: false
+        passwd: $6$fc4byEsY4Xhs4c9Q$DEynYewfXwFaJqoAue7RxyUp2pDe6vYQFZRqTa3xYhsn8HupyHez6yO7ltGhQ7o3aDNRR9zssgQJypIQ6Vxhu.
+        ssh-authorized-keys:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICST/387GTgu9qAPn92kzTsEyaXu6fdPryg4z+1azovj gabriel@marim
+    ssh_pwauth: true
+    disable_root: true
+
+    packages:
+      - openssh-server
+
+    bootcmd:
+      - date > /etc/server_release
+      
+  user.network-config: |
+    version: 1
+    config:
+      - type: physical
+        name: enp5s0
+        subnets:
+          - type: static
+            ipv4: true
+            address: 192.168.50.11
+            netmask: 255.255.255.0
+            gateway: 192.168.50.1
+            control: auto
+      - type: nameserver
+        address: 192.168.50.4
