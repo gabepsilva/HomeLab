@@ -23,7 +23,7 @@ pipeline {
                 script{ 
                     
                     currentBuild.result = 'ABORTED'
-                    exit("No changes in the documentation")
+                    error("No changes in the documentation")
                 }
                 echo('Skipping mail notification')
                 
