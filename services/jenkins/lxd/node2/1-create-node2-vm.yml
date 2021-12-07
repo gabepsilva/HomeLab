@@ -20,5 +20,5 @@
     - name: Delete script 
       file:
         state: absent
-        path: "/tmp/jenkins"
+        path: "/tmp/jenkins" 
         
