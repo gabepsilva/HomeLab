@@ -7,31 +7,6 @@ pipeline {
     
     stages{
 
-        stage('Cull non docs builds') {
-            when {
-                not {
-                    anyOf {
-                        changeset "**/docs/*"
-                        changeset "**/docs-config/*"
-                        expression { env.LOGNAME != '' }
-                    }
-                    
-                }
-            }
-
-            steps {
-                
-                script{ 
-                    
-                    sh 'env|sort'
-                    currentBuild.result = 'ABORTED'
-                    error("No changes in the documentation")
-                }
-                echo('Skipping mail notification')
-                
-            }
-        }
-
         stage('Build Docs') {
 
             steps {
